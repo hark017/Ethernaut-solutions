@@ -6,6 +6,7 @@ contract Fallout {
     address payable public owner;
 
     /* constructor */
+    // But this is the flaw 
     function Fal1out() public payable {
         owner = payable(msg.sender);
         allocations[owner] = msg.value;
