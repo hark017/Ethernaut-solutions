@@ -6,7 +6,7 @@ import "forge-std/Test.sol";
 import "./CoinFlip.sol";
 import "./Solution.sol";
 
-contract test_coinFlip is Test{
+contract test_coinFlip is Test {
     CoinFlip level;
     Solution solution;
     address player = makeAddr("player");
@@ -20,13 +20,13 @@ contract test_coinFlip is Test{
         vm.deal(player, 1 ether);
     }
 
-    function test_coinflip() public{
+    function test_coinflip() public {
         vm.startPrank(player);
-        for (uint256 i = 0 ; i<10 ;){
+        for (uint256 i = 0; i < 10;) {
             solution.attack(address(level));
             vm.roll(block.number + 1);
             i++;
         }
-    assertEq(10, level.consecutiveWins(),"attack successful ");
+        assertEq(10, level.consecutiveWins(), "attack successful ");
     }
 }
