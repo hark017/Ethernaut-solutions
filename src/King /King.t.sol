@@ -31,7 +31,7 @@ contract test_solution is Test {
         vm.stopPrank();
         vm.startPrank(player1); // because he is the owner
         vm.expectRevert(bytes("sorry buddy, I got you!"));
-        (bool success,) = address(_king).call{value: 1 wei}("");
+        (bool success,) = address(_king).call{value: 1 wei}(""); // owner can call with whatever value
         vm.stopPrank();
     }
 }
