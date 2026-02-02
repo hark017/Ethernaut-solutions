@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+//   You'll need to hijack this wallet to become the admin of the proxy.
+
 import "../helpers/UpgradeableProxy-08.sol";
 
 contract PuzzleProxy is UpgradeableProxy {
