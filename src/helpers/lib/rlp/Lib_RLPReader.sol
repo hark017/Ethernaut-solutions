@@ -45,7 +45,7 @@ library Lib_RLPReader {
             ptr := add(_in, 32)
         }
 
-        return RLPItem({ length: _in.length, ptr: ptr });
+        return RLPItem({length: _in.length, ptr: ptr});
     }
 
     /**
@@ -54,7 +54,7 @@ library Lib_RLPReader {
      * @return Decoded RLP list items.
      */
     function readList(RLPItem memory _in) internal pure returns (RLPItem[] memory) {
-        (uint256 listOffset, , RLPItemType itemType) = _decodeLength(_in);
+        (uint256 listOffset,, RLPItemType itemType) = _decodeLength(_in);
 
         require(itemType == RLPItemType.LIST_ITEM, "Invalid RLP list value.");
 
@@ -69,11 +69,10 @@ library Lib_RLPReader {
         while (offset < _in.length) {
             require(itemCount < MAX_LIST_LENGTH, "Provided RLP list exceeds max list length.");
 
-            (uint256 itemOffset, uint256 itemLength, ) = _decodeLength(
-                RLPItem({ length: _in.length - offset, ptr: _in.ptr + offset })
-            );
+            (uint256 itemOffset, uint256 itemLength,) =
+                _decodeLength(RLPItem({length: _in.length - offset, ptr: _in.ptr + offset}));
 
-            out[itemCount] = RLPItem({ length: itemLength + itemOffset, ptr: _in.ptr + offset });
+            out[itemCount] = RLPItem({length: itemLength + itemOffset, ptr: _in.ptr + offset});
 
             itemCount += 1;
             offset += itemOffset + itemLength;
@@ -261,15 +260,7 @@ library Lib_RLPReader {
      * @return Length of the encoded data.
      * @return RLP item type (LIST_ITEM or DATA_ITEM).
      */
-    function _decodeLength(RLPItem memory _in)
-        private
-        pure
-        returns (
-            uint256,
-            uint256,
-            RLPItemType
-        )
-    {
+    function _decodeLength(RLPItem memory _in) private pure returns (uint256, uint256, RLPItemType) {
         require(_in.length > 0, "RLP item cannot be null.");
 
         uint256 ptr = _in.ptr;
@@ -339,11 +330,7 @@ library Lib_RLPReader {
      * @param _length Number of bytes to read.
      * @return Copied bytes.
      */
-    function _copy(
-        uint256 _src,
-        uint256 _offset,
-        uint256 _length
-    ) private pure returns (bytes memory) {
+    function _copy(uint256 _src, uint256 _offset, uint256 _length) private pure returns (bytes memory) {
         bytes memory out = new bytes(_length);
         if (out.length == 0) {
             return out;
@@ -368,7 +355,7 @@ library Lib_RLPReader {
         // Pick out the remaining bytes.
         uint256 mask;
         unchecked {
-            mask = 256**(32 - (_length % 32)) - 1;
+            mask = 256 ** (32 - (_length % 32)) - 1;
         }
 
         assembly {

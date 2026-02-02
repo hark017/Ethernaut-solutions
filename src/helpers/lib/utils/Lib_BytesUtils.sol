@@ -9,11 +9,7 @@ library Lib_BytesUtils {
      * Internal Functions *
      **********************/
 
-    function slice(
-        bytes memory _bytes,
-        uint256 _start,
-        uint256 _length
-    ) internal pure returns (bytes memory) {
+    function slice(bytes memory _bytes, uint256 _start, uint256 _length) internal pure returns (bytes memory) {
         require(_length + 31 >= _length, "slice_overflow");
         require(_start + _length >= _start, "slice_overflow");
         require(_bytes.length >= _start + _length, "slice_outOfBounds");

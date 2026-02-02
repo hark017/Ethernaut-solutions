@@ -2,9 +2,9 @@
 pragma solidity ^0.8.9;
 
 /* Library Imports */
-import { Lib_BytesUtils } from "../utils/Lib_BytesUtils.sol";
-import { Lib_RLPReader } from "../rlp/Lib_RLPReader.sol";
-import { Lib_RLPWriter } from "../rlp/Lib_RLPWriter.sol";
+import {Lib_BytesUtils} from "../utils/Lib_BytesUtils.sol";
+import {Lib_RLPReader} from "../rlp/Lib_RLPReader.sol";
+import {Lib_RLPWriter} from "../rlp/Lib_RLPWriter.sol";
 
 /**
  * @title Lib_MerkleTrie
@@ -65,12 +65,11 @@ library Lib_MerkleTrie {
      * included proof is correctly constructed.
      * @return _verified `true` if the k/v pair exists in the trie, `false` otherwise.
      */
-    function verifyInclusionProof(
-        bytes memory _key,
-        bytes memory _value,
-        bytes memory _proof,
-        bytes32 _root
-    ) internal pure returns (bool _verified) {
+    function verifyInclusionProof(bytes memory _key, bytes memory _value, bytes memory _proof, bytes32 _root)
+        internal
+        pure
+        returns (bool _verified)
+    {
         (bool exists, bytes memory value) = get(_key, _proof, _root);
 
         return (exists && Lib_BytesUtils.equal(_value, value));
@@ -84,17 +83,13 @@ library Lib_MerkleTrie {
      * @return _exists Whether or not the key exists.
      * @return _value Value of the key if it exists.
      */
-    function get(
-        bytes memory _key,
-        bytes memory _proof,
-        bytes32 _root
-    ) internal pure returns (bool _exists, bytes memory _value) {
+    function get(bytes memory _key, bytes memory _proof, bytes32 _root)
+        internal
+        pure
+        returns (bool _exists, bytes memory _value)
+    {
         TrieNode[] memory proof = _parseProof(_proof);
-        (uint256 pathLength, bytes memory keyRemainder, bool isFinalNode) = _walkNodePath(
-            proof,
-            _key,
-            _root
-        );
+        (uint256 pathLength, bytes memory keyRemainder, bool isFinalNode) = _walkNodePath(proof, _key, _root);
 
         bool exists = keyRemainder.length == 0;
 
@@ -118,18 +113,10 @@ library Lib_MerkleTrie {
      * @return _keyRemainder Portion of the key remaining after the walk.
      * @return _isFinalNode Whether or not we've hit a dead end.
      */
-    function _walkNodePath(
-        TrieNode[] memory _proof,
-        bytes memory _key,
-        bytes32 _root
-    )
+    function _walkNodePath(TrieNode[] memory _proof, bytes memory _key, bytes32 _root)
         private
         pure
-        returns (
-            uint256 _pathLength,
-            bytes memory _keyRemainder,
-            bool _isFinalNode
-        )
+        returns (uint256 _pathLength, bytes memory _keyRemainder, bool _isFinalNode)
     {
         uint256 pathLength = 0;
         bytes memory key = Lib_BytesUtils.toNibbles(_key);
@@ -153,16 +140,10 @@ library Lib_MerkleTrie {
                 require(keccak256(currentNode.encoded) == currentNodeID, "Invalid root hash");
             } else if (currentNode.encoded.length >= 32) {
                 // Nodes 32 bytes or larger are hashed inside branch nodes.
-                require(
-                    keccak256(currentNode.encoded) == currentNodeID,
-                    "Invalid large internal hash"
-                );
+                require(keccak256(currentNode.encoded) == currentNodeID, "Invalid large internal hash");
             } else {
                 // Nodes smaller than 31 bytes aren't hashed.
-                require(
-                    Lib_BytesUtils.toBytes32(currentNode.encoded) == currentNodeID,
-                    "Invalid internal node hash"
-                );
+                require(Lib_BytesUtils.toBytes32(currentNode.encoded) == currentNodeID, "Invalid internal node hash");
             }
 
             if (currentNode.decoded.length == BRANCH_NODE_LENGTH) {
@@ -188,10 +169,7 @@ library Lib_MerkleTrie {
                 uint256 sharedNibbleLength = _getSharedNibbleLength(pathRemainder, keyRemainder);
 
                 if (prefix == PREFIX_LEAF_EVEN || prefix == PREFIX_LEAF_ODD) {
-                    if (
-                        pathRemainder.length == sharedNibbleLength &&
-                        keyRemainder.length == sharedNibbleLength
-                    ) {
+                    if (pathRemainder.length == sharedNibbleLength && keyRemainder.length == sharedNibbleLength) {
                         // The key within this leaf matches our key exactly.
                         // Increment the key index to reflect that we have no remainder.
                         currentKeyIndex += sharedNibbleLength;
@@ -238,7 +216,7 @@ library Lib_MerkleTrie {
 
         for (uint256 i = 0; i < nodes.length; i++) {
             bytes memory encoded = Lib_RLPReader.readBytes(nodes[i]);
-            proof[i] = TrieNode({ encoded: encoded, decoded: Lib_RLPReader.readList(encoded) });
+            proof[i] = TrieNode({encoded: encoded, decoded: Lib_RLPReader.readList(encoded)});
         }
 
         return proof;
@@ -290,11 +268,7 @@ library Lib_MerkleTrie {
      * @param _b Second nibble array.
      * @return _shared Number of shared nibbles.
      */
-    function _getSharedNibbleLength(bytes memory _a, bytes memory _b)
-        private
-        pure
-        returns (uint256 _shared)
-    {
+    function _getSharedNibbleLength(bytes memory _a, bytes memory _b) private pure returns (uint256 _shared) {
         uint256 i = 0;
         while (_a.length > i && _b.length > i && _a[i] == _b[i]) {
             i++;

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 /* Library Imports */
-import { Lib_MerkleTrie } from "./Lib_MerkleTrie.sol";
+import {Lib_MerkleTrie} from "./Lib_MerkleTrie.sol";
 
 /**
  * @title Lib_SecureMerkleTrie
@@ -24,12 +24,11 @@ library Lib_SecureMerkleTrie {
      * included proof is correctly constructed.
      * @return _verified `true` if the k/v pair exists in the trie, `false` otherwise.
      */
-    function verifyInclusionProof(
-        bytes memory _key,
-        bytes memory _value,
-        bytes memory _proof,
-        bytes32 _root
-    ) internal pure returns (bool _verified) {
+    function verifyInclusionProof(bytes memory _key, bytes memory _value, bytes memory _proof, bytes32 _root)
+        internal
+        pure
+        returns (bool _verified)
+    {
         bytes memory key = _getSecureKey(_key);
         return Lib_MerkleTrie.verifyInclusionProof(key, _value, _proof, _root);
     }
@@ -42,11 +41,11 @@ library Lib_SecureMerkleTrie {
      * @return _exists Whether or not the key exists.
      * @return _value Value of the key if it exists.
      */
-    function get(
-        bytes memory _key,
-        bytes memory _proof,
-        bytes32 _root
-    ) internal pure returns (bool _exists, bytes memory _value) {
+    function get(bytes memory _key, bytes memory _proof, bytes32 _root)
+        internal
+        pure
+        returns (bool _exists, bytes memory _value)
+    {
         bytes memory key = _getSecureKey(_key);
         return Lib_MerkleTrie.get(key, _proof, _root);
     }
