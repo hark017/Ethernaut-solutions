@@ -10,5 +10,26 @@
       "name": "v5.5.0",
       "rev": "fcbae5394ae8ad52d8e580a3477db99814b9d565"
     }
+  },
+  "lib/openzeppelin-contracts-06": {
+    "rev": "8e02960"
+  },
+  "lib/openzeppelin-contracts-08": {
+    "rev": "ecd2ca2"
+  },
+  "lib/openzeppelin-contracts-upgradeable": {
+    "rev": "2d081f2"
+  },
+  "lib/openzeppelin-contracts-v4.6.0": {
+    "rev": "d4fb3a8"
+  },
+  "lib/openzeppelin-contracts-v5.4.0": {
+    "rev": "c64a1ed"
+  },
+  "lib/oz-06": {
+    "tag": {
+      "name": "v3.4.0",
+      "rev": "fa64a1ced0b70ab89073d5d0b6e01b0778f7e7d6"
+    }
   }
 }
