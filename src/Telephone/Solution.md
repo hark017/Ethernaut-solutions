@@ -1,2 +1,16 @@
-# solution-Telephone 
-Well no explanation required but still, the tx.origin is the initial address by which the very first call of the transaction is being made. While the msg.sender for the contract is the address which calls a function on that contract which is in our case is the solution contract's address and tx.origin will be the address which calls the attack function on the solution contract.
+# Solution - Telephone
+
+**What the challenge is about**  
+This level shows why using `tx.origin` for authorization is dangerous and how it can be abused through intermediate contracts.
+
+**Where the bug is**  
+The contract checks `require(tx.origin == owner)` (or similar) to guard `changeOwner`, instead of using `msg.sender`. This means any contract can forward a call where `tx.origin` is still the original EOA.
+
+**How to exploit it**  
+- Deploy an attacker contract with a function that calls `Telephone.changeOwner(player)`.  
+- As the player EOA, call the attacker contract.  
+- Inside `Telephone`, `tx.origin` is the player and passes the check, but `msg.sender` is the attacker contract, which can set the owner to you.
+
+**How to avoid this bug**  
+- Never use `tx.origin` for permission checks; always rely on `msg.sender`.  
+- Treat `tx.origin` only as a debugging/observability tool, not for access control.

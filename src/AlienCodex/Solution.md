@@ -1,10 +1,17 @@
-# solution - AlienCodex
+# Solution - AlienCodex
 
-`bytes32[] public codex;` this is declared on slot 3 of the storage. 
- Step-1 : call the function ``makeContact()` to make `contract` true.
- Step-2 : call `retract()`, as the current length og the array is 0, it will cause the underflow situation and make the length of the array as 2^256
- Step-3 : call the `revise()` with `i = 2^256-j` and `_content = uint256(uint160(player_address))` select j such as it writes on the slot 0, here the first element of the array will be at slot `keccak256(abi.encode(n))` so using this calculate the j such that it writes on the slot 0 where the owner variable resides.
+**What the challenge is about**  
+This level is about how dynamic arrays are laid out in storage and how an integer underflow can let you overwrite arbitrary storage slots, including `owner`.
 
-Now why is this happening?
+**Where the bug is**  
+The `retract()` function decreases the length of `codex` without safety checks. When the length is already `0`, subtracting `1` underflows and sets the array length to \(2^{256} - 1\), so the array “covers” the entire storage.
 
-This is caused because of the underflow issue in the `retract()` function which makes the length of the array `2^256` because there are 2^256 slots in smart contract storage, so the array holds all the slots in the storage now. So any slot can be overwritten by the using the function `revise()`
+**How to exploit it (high level)**  
+- Call `makeContact()` so the contract accepts interaction.  
+- Call `retract()` once to underflow the array length to \(2^{256} - 1\).  
+- Compute the index `i` such that `keccak256(abi.encode(1)) + i == 0` (the slot where `owner` is stored).  
+- Call `revise(i, bytes32(uint256(uint160(player))))` to overwrite the `owner` slot with your address.
+
+**How to avoid this bug**  
+- Always use checked arithmetic (or Solidity ^0.8.0 built‑in checks) when changing array lengths.  
+- Never allow user‑controlled indices to indirectly write to critical storage like `owner` unless tightly validated.
